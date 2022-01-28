@@ -8,9 +8,7 @@ var mime = require('mime');
 
 const Schema = mongoose.Schema;
 
-// const url1 = "mongodb+srv://Caleb:Caleb@cluster0.v0tod.mongodb.net/Project0?retryWrites=true&w=majority";
-
-mongoose.connect("mongodb+srv://caleb:caleb@cluster0.dhlbw.mongodb.net/sermontracker?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect("mongodb+srv://your-mongodb-atlas-link-here", { useNewUrlParser: true, useUnifiedTopology: true });
 
 const app = express();
 app.set('view engine', 'pug');
