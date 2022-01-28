@@ -1,0 +1,83 @@
+doctype 
+html
+  head
+    <link href="/css/styles.css" rel="stylesheet">
+    <script src="/js/functions.js"></script>
+    title Sermon Tracker
+    <link rel="shortcut icon" href="img/icon.png" type="image/x-icon">
+
+  body
+    div.sidebar
+      a(href="/home").icon
+        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="house-crack" class="svg-inline--fa fa-house-crack" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="#222831" d="M511.8 287.6L512.5 447.7C512.6 483.2 483.9 512 448.5 512H326.4L288 448L368.8 380.7C376.6 374.1 376.5 362.1 368.5 355.8L250.6 263.2C235.1 251.7 216.8 270.1 227.8 285.2L288 368L202.5 439.2C196.5 444.3 194.1 452.1 199.1 459.8L230.4 512H128.1C92.75 512 64.09 483.3 64.09 448V287.6H32.05C14.02 287.6 0 273.5 0 255.5C0 246.5 3.004 238.5 10.01 231.5L266.4 8.016C273.4 1.002 281.4 0 288.4 0C295.4 0 303.4 2.004 309.5 7.014L564.8 231.5C572.8 238.5 576.9 246.5 575.8 255.5C575.8 273.5 560.8 287.6 543.8 287.6H511.8z"></path></svg>
+      a(href="/export" style="width: 23px; ").icon
+        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-arrow-down" class="svg-inline--fa fa-file-arrow-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="#222831" d="M384 128h-128V0L384 128zM256 160H384v304c0 26.51-21.49 48-48 48h-288C21.49 512 0 490.5 0 464v-416C0 21.49 21.49 0 48 0H224l.0039 128C224 145.7 238.3 160 256 160zM255 295L216 334.1V232c0-13.25-10.75-24-24-24S168 218.8 168 232v102.1L128.1 295C124.3 290.3 118.2 288 112 288S99.72 290.3 95.03 295c-9.375 9.375-9.375 24.56 0 33.94l80 80c9.375 9.375 24.56 9.375 33.94 0l80-80c9.375-9.375 9.375-24.56 0-33.94S264.4 285.7 255 295z"></path></svg>
+
+
+    table(style="margin-left: 7%;")
+      tr(style="position: sticky; top: 7px;")
+        th Sermon Title
+        th Topic Preached
+        th Location Preached
+        th Date Preached 
+      form(action="/submit" method="post" id="submit")
+        tr(style="position: sticky; top: 49px; background-color: #eeeeee;")
+          td(style="padding: 0px 4px; padding-left: 0px; padding-right: 6px; margin: 0px;")
+            input.input-orange(style="margin: auto; display: block; padding: 7px 0px; text-align: center; margin: 0px; width: 100%;" placeholder="Title" name="title")
+          td(style="padding: 0px 4px; padding-left: 0px; padding-right: 6px; margin: 0px;")
+            input.input-orange(style="margin: auto; display: block; padding: 7px 0px; text-align: center; margin: 0px; width: 100%;" placeholder="Topic" name="topic")
+          td(style="padding: 0px 4px; padding-left: 0px; padding-right: 6px; margin: 0px;")
+            input.input-orange(style="margin: auto; display: block; padding: 7px 0px; text-align: center; margin: 0px; width: 100%;" placeholder="Location" name="location")
+          td(style="padding: 0px 4px; padding-left: 0px; padding-right: 6px; margin: 0px;")
+            input.input-orange(style="margin: auto; display: block; padding: 5.5px 0px; text-align: center; margin: 0px; width: 100%;" placeholder="Date" type="date" name="date")
+            button.btn-orange(style="display: none; margin: auto; margin-top: 50px;") Submit
+            input.input-orange(style="display: none; margin: auto; margin-top: 50px;" value=data id="data")
+      each d in data
+        tr(id="row-"+d.index ondblclick="document.getElementById(\""+"form-"+d.index+"\").submit();" onclick="showEdit("+d.index+")")
+          form(action="/delete" method="post" id="form-"+d.index)
+            td=d.title
+            td=d.topic
+            td=d.place 
+            td=d.date
+            td(style="display: none;")
+              input.input-light-gray(style="margin: auto; display: block;" placeholder="Location" id="index" name="index" value=d.index)
+            //- td(style="display: none;")
+            //-   button.btn-orange(style="display: none; margin: auto; margin-top: 50px;") Submit
+
+      div.editPopup#popup(style="display: none; position: fixed; right: 0px; top: 100px; background-color: #eeeeee; padding: 20px; border-radius: 7px 0px 0px 7px; z-index: 1; border: 1px solid #aaa")
+        form(action="/edit" method="post" id="form-edit")
+          input.input-light-gray(style="margin: 5px auto; display: block;" placeholder="Title" name="title" id="title-data")
+          input.input-light-gray(style="margin: 5px auto; display: block;" placeholder="Topic" name="topic" id="topic-data")
+          input.input-light-gray(style="margin: 5px auto; display: block;" placeholder="Location" name="place" id="place-data")
+          input.input-light-gray(style="margin: 5px auto; display: block;" placeholder="Date" name="date" id="date-data")
+          input.input-light-gray(style="margin: 5px auto; display: none;" placeholder="Date" name="index" id="index-data")
+          button.btn-orange(style="display: block; margin: auto; margin-top: 10px;") Submit
+
+    script. 
+
+      var d = JSON.parse(document.getElementById('data').value);
+      var title = document.getElementById('title-data').value;
+      var topic = document.getElementById('topic-data').value;
+      var place = document.getElementById('place-data').value;
+      var date = document.getElementById('date-data').value;
+
+      var display = 'none'
+
+      function showEdit(index){
+        //- console.log(index)
+        //- console.log(document.getElementById('data').value)
+        //- console.log(d[index])
+        document.getElementById('title-data').value = d[index].title;
+        document.getElementById('topic-data').value = d[index].topic
+        document.getElementById('place-data').value = d[index].place
+        document.getElementById('date-data').value = d[index].date
+        document.getElementById('index-data').value = index;
+
+        if (display == 'none'){
+          document.getElementById('popup').style.display = 'block'
+          display = 'block'
+        } else if (display == 'block') {
+          document.getElementById('popup').style.display = 'none'
+          display = 'none'
+        }
+      }
